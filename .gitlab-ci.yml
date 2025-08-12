@@ -1,0 +1,57 @@
+stages:
+  - setup
+  - test
+  - report
+
+variables:
+  MAVEN_OPTS: "-Dmaven.test.failure.ignore=true"
+  REPORT_DIR: "target/cucumber-reports"
+
+default:
+  image: "maven:3.9-openjdk-22" # Correct string definition for the Docker image
+  before_script:
+    - echo "Using Docker image - maven:3.9-openjdk-22"
+    - mvn --version
+    - java -version
+
+setup_environment:
+  stage: setup
+  script:
+    # Validate environment and prepare dependencies
+    - echo "Validating the environment and resolving dependencies"
+    - mvn dependency:resolve
+    - mvn clean
+
+test_job:
+  stage: test
+  script:
+    # Run tests
+    - echo "Executing tests with Maven"
+    - mvn test
+  artifacts:
+    paths:
+      - ${REPORT_DIR} # Save test reports in artifacts
+    when: always
+
+generate_report:
+  stage: report
+  script:
+    # Generate Cucumber HTML report
+    - echo "Generating the final report"
+    - mvn verify
+  artifacts:
+    paths:
+      - ${REPORT_DIR} # Save the generated reports
+    expire_in: 7 days
+  when: always
+
+notifications:
+  stage: report
+  script:
+    # Send notification on failure
+    - echo "Sending notification in case of failure"
+    - if [ "$CI_JOB_STATUS" == "failed" ]; then echo "Tests failed. Check reports in the artifacts."; fi
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"' # Allow execution only on the main branch
