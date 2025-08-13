@@ -1,5 +1,5 @@
 #language: en
-@login
+@loginOrange
 Feature: Authentication
   I need to connect to orange website
 

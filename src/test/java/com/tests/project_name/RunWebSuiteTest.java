@@ -32,7 +32,7 @@ import static io.cucumber.junit.CucumberOptions.SnippetType.CAMELCASE;
 				"json:target/report/cucumber.json",
 		},
         //glue = {"step_definitions"},
-		tags = "@login",
+		tags = "@loginOrange",
 		monochrome = true,
 		snippets = CAMELCASE
 )
