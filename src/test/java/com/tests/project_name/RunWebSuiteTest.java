@@ -31,7 +31,7 @@ import static io.cucumber.junit.CucumberOptions.SnippetType.CAMELCASE;
 				"html:target/report/cucumber-report.html",
 				"json:target/report/cucumber.json",
 		},
-        glue = {"step_definitions"},
+        //glue = {"step_definitions"},
 		tags = "@login",
 		monochrome = true,
 		snippets = CAMELCASE
